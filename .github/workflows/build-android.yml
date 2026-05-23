@@ -27,6 +27,12 @@ jobs:
         working-directory: src
         run: npm ci
 
+      - name: Patch @react-native-voice/voice to remove support library
+        working-directory: src
+        run: |
+          sed -i 's/com\.android\.support:appcompat-v7:[^"]*/androidx.appcompat:appcompat:1.6.1/' node_modules/@react-native-voice/voice/android/build.gradle
+          grep appcompat node_modules/@react-native-voice/voice/android/build.gradle
+
       - name: Expo prebuild
         working-directory: src
         run: npx expo prebuild --platform android --no-install
