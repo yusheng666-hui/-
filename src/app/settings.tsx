@@ -323,6 +323,31 @@ export default function SettingsScreen() {
         autoCapitalize="none"
       />
 
+      <TouchableOpacity
+        style={[s.testBtn, { borderColor: themeColors.border }]}
+        onPress={async () => {
+          if (!apiKey) { Alert.alert('提示', '请先输入 API Key'); return }
+          try {
+            const url = apiBaseUrl.replace(/\/+$/, '')
+            const res = await fetch(url.includes('openai.com') ? `${url}/v1/models` : `${url}/v1/messages`, {
+              method: apiType === 'openai' ? 'GET' : 'POST',
+              headers: apiType === 'openai'
+                ? { 'Authorization': `Bearer ${apiKey}` }
+                : { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
+              body: apiType === 'openai' ? undefined : JSON.stringify({
+                model: apiModel, max_tokens: 1, messages: [{ role: 'user', content: 'hi' }],
+              }),
+              signal: AbortSignal.timeout(10000),
+            })
+            Alert.alert(res.ok ? '✅ 连接成功' : '❌ 连接失败', res.ok ? 'API 配置正确' : '请检查 API Key 和地址')
+          } catch {
+            Alert.alert('❌ 连接失败', '网络错误或超时')
+          }
+        }}
+      >
+        <Text style={[s.testBtnText, { color: themeColors.accent }]}>测试连接</Text>
+      </TouchableOpacity>
+
       {/* 学习阶段 */}
       <Text style={[s.sectionTitle, { marginTop: 32 }]}>学习进度</Text>
       <LearningBadge stage={learningStage} interactionCount={interactionCount} theme={themeColors} />
@@ -769,14 +794,16 @@ export default function SettingsScreen() {
         覆盖当前所有数据（操作不可撤销）
       </Text>
 
-      {/* 隐藏的文件选择器（Web） */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept=".json"
-        style={{ display: 'none' }}
-        onChange={handleFileSelected}
-      />
+      {/* 隐藏的文件选择器（仅 Web） */}
+      {Platform.OS === 'web' && (
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".json"
+          style={{ display: 'none' }}
+          onChange={handleFileSelected}
+        />
+      )}
 
       <TouchableOpacity style={[s.saveButton, { backgroundColor: themeColors.accent }]} onPress={handleSave}>
         <Text style={s.saveText}>保存配置</Text>
@@ -987,6 +1014,17 @@ function makeStyles(theme: ThemeColors) {
       borderRadius: 8,
       paddingVertical: 10,
       alignItems: 'center',
+    },
+    testBtn: {
+      marginTop: 12,
+      borderRadius: 10,
+      paddingVertical: 12,
+      alignItems: 'center',
+      borderWidth: 1,
+    },
+    testBtnText: {
+      fontSize: 14,
+      fontWeight: '600',
     },
   })
 }

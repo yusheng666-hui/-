@@ -485,14 +485,14 @@ export default function ChatScreen() {
   return (
     <KeyboardAvoidingView
       style={[s.container, { backgroundColor: theme.background }]}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? insets.top + 44 : 0}
     >
       <Stack.Screen
         options={{
           title: '雨声',
           headerLeft: () => (
-            <TouchableOpacity onPress={() => router.push('/')} style={{ marginRight: 12 }}>
+            <TouchableOpacity onPress={() => router.dismissAll()} style={{ marginRight: 12 }}>
               <Text style={{ color: theme.textMuted, fontSize: 13 }}>‹ 首页</Text>
             </TouchableOpacity>
           ),

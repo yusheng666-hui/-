@@ -104,6 +104,34 @@ APK 生成在 `android/app/build/outputs/apk/debug/`。
 
 > 注意：本地构建需要下载 Gradle、Android SDK 等依赖，首次构建较慢。建议使用 GitHub Actions。
 
+## ### 6. index.android.bundle 缺失 / Unable to load script
+
+**错误**：安装 APK 后打开闪退，显示 `Unable to load script. Make sure you're running Metro or that your bundle 'index.android.bundle' is packaged correctly for release.`
+
+**原因**：`gradlew assembleDebug` 不会自动生成 JS bundle，需要先手动打包。
+
+**修复**：workflow 中在 `expo prebuild` 之后、`assembleDebug` 之前加入 bundle 步骤：
+```yaml
+- name: Bundle JS for Android
+  working-directory: src
+  run: |
+    mkdir -p android/app/src/main/assets
+    npx react-native bundle \
+      --platform android \
+      --dev false \
+      --entry-file index.js \
+      --bundle-output android/app/src/main/assets/index.android.bundle \
+      --assets-dest android/app/src/main/res
+```
+
+**依赖要求**：
+- `npx react-native bundle` 需要 `@react-native-community/cli`
+- Expo 项目还需要 `@expo/metro-config`（提供 Expo 特定的 Metro 配置）
+- 项目根目录需要 `metro.config.js`（使用 `@expo/metro-config` 的 `getDefaultConfig`）
+- 需要 `src/index.js` 作为入口文件（内容：`import 'expo-router/entry'`）
+
+已在 `src/package.json` 的 `devDependencies` 中添加了上述依赖。
+
 ## 涉及文件
 
 | 文件 | 作用 |
