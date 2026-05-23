@@ -59,8 +59,8 @@ function withAndroidWidget(config) {
     const mainApplication = androidManifest.manifest.application?.[0]
 
     if (mainApplication) {
-      if (!mainApplication.receivers) mainApplication.receivers = []
-      mainApplication.receivers.push({
+      if (!mainApplication.receiver) mainApplication.receiver = []
+      mainApplication.receiver.push({
         $: {
           'android:name': '.MoodWidgetProvider',
           'android:exported': 'true',
