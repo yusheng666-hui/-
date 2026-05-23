@@ -34,7 +34,7 @@ function withIOSWidget(config) {
 
     const widgetFiles = ['WidgetExtension.swift', 'WidgetBundle.swift']
     for (const file of widgetFiles) {
-      const srcPath = path.join(__dirname, '..', '..', 'widgets', 'ios', file)
+      const srcPath = path.join(__dirname, '..', 'widgets', 'ios', file)
       const destPath = path.join(widgetSrcDir, file)
       if (fs.existsSync(srcPath)) {
         fs.copyFileSync(srcPath, destPath)
@@ -42,7 +42,7 @@ function withIOSWidget(config) {
       }
     }
 
-    const plistSrc = path.join(__dirname, '..', '..', 'widgets', 'ios', 'Info.plist')
+    const plistSrc = path.join(__dirname, '..', 'widgets', 'ios', 'Info.plist')
     const plistDest = path.join(widgetSrcDir, 'Info.plist')
     if (fs.existsSync(plistSrc)) {
       fs.copyFileSync(plistSrc, plistDest)
@@ -87,7 +87,7 @@ function withAndroidWidget(config) {
       // Java source
       const srcDir = path.join(nativeDir, 'app', 'src', 'main', 'java', packagePath)
       if (!fs.existsSync(srcDir)) fs.mkdirSync(srcDir, { recursive: true })
-      const kotlinSrc = path.join(__dirname, '..', '..', 'widgets', 'android', 'MoodWidgetProvider.kt')
+      const kotlinSrc = path.join(__dirname, '..', 'widgets', 'android', 'MoodWidgetProvider.kt')
       if (fs.existsSync(kotlinSrc)) {
         fs.copyFileSync(kotlinSrc, path.join(srcDir, 'MoodWidgetProvider.kt'))
       }
@@ -95,7 +95,7 @@ function withAndroidWidget(config) {
       // Layout XML
       const layoutDir = path.join(nativeDir, 'app', 'src', 'main', 'res', 'layout')
       if (!fs.existsSync(layoutDir)) fs.mkdirSync(layoutDir, { recursive: true })
-      const layoutSrc = path.join(__dirname, '..', '..', 'widgets', 'android', 'mood_widget_layout.xml')
+      const layoutSrc = path.join(__dirname, '..', 'widgets', 'android', 'mood_widget_layout.xml')
       if (fs.existsSync(layoutSrc)) {
         fs.copyFileSync(layoutSrc, path.join(layoutDir, 'mood_widget_layout.xml'))
       }
@@ -103,7 +103,7 @@ function withAndroidWidget(config) {
       // XML resources
       const xmlDir = path.join(nativeDir, 'app', 'src', 'main', 'res', 'xml')
       if (!fs.existsSync(xmlDir)) fs.mkdirSync(xmlDir, { recursive: true })
-      const infoSrc = path.join(__dirname, '..', '..', 'widgets', 'android', 'mood_widget_info.xml')
+      const infoSrc = path.join(__dirname, '..', 'widgets', 'android', 'mood_widget_info.xml')
       if (fs.existsSync(infoSrc)) {
         fs.copyFileSync(infoSrc, path.join(xmlDir, 'mood_widget_info.xml'))
       }
