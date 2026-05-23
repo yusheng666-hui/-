@@ -62,15 +62,26 @@ supabase db push
 
 ## CI/CD — 自动构建 APK
 
-每次推送到 `main` 或 `master` 分支时，GitHub Actions 自动构建 Android APK：
+每次推送到 `main` 或 `master` 分支时，GitHub Actions 自动构建 Android APK。
 
-1. **检出代码** → **安装依赖** → **Expo prebuild** → **Gradle 构建** → **上传 APK**
-2. 构建完成后，在 Actions 页面下载 `yusheng-apk` artifact
-3. 安装到 Android 手机（侧载，需允许未知来源）
+构建流程：`npm ci` → patch 第三方依赖 → `expo prebuild` → `gradle assembleDebug` → 上传 APK
 
-### 已知问题
+构建完成后，在 Actions 页面下载 `yusheng-apk` artifact，侧载到 Android 手机安装。
 
-`@react-native-voice/voice` 依赖旧版 `com.android.support:appcompat-v7`，与 AndroidX 冲突。workflow 在 `npm ci` 后自动 patch 该依赖为 `androidx.appcompat:appcompat`。如果升级该库版本，需确认 patch 是否仍然有效。
+### 已知问题与修复
+
+构建中已自动处理的兼容性问题：
+
+| 问题 | 原因 | 修复方式 |
+|------|------|----------|
+| AndroidX 冲突 | `@react-native-voice/voice` 依赖 `com.android.support:appcompat-v7` | workflow 中 `sed` patch 为 `androidx.appcompat:appcompat` |
+| 小组件 XML 中文字符串 | `android:description` 不支持字面量中文，需要 `@string` 引用 | 已在 `mood_widget_info.xml` 中移除该属性 |
+| AndroidManifest 标签名 | xml2js 序列化时数组 key 变成 XML 标签名，`receivers` 应为 `receiver` | 已在 `withWidget.js` 中修正 |
+| 资源文件路径 | 插件中 `__dirname` 计算路径多了一层 `..` | 已在 `withWidget.js` 中修正为 `path.join(__dirname, '..', 'widgets/...')` |
+
+如果升级 `@react-native-voice/voice` 或修改 `withWidget.js`，需确认上述 patch 仍然有效。
+
+详见 [`docs/BUILD.md`](docs/BUILD.md)。
 
 ## 文档
 
