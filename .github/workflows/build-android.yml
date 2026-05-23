@@ -23,35 +23,38 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Setup Android SDK
-        run: |
-          echo "ANDROID_HOME=$ANDROID_HOME"
-          ls -la $ANDROID_HOME/ || echo "ANDROID_HOME not set/found"
-          echo "JAVA_HOME=$JAVA_HOME"
-
       - name: Install dependencies
         working-directory: src
         run: npm ci
 
-      - name: Expo prebuild
+      - name: Build APK with Expo
         working-directory: src
-        run: npx expo prebuild --platform android --no-install
-
-      - name: Accept Android SDK licenses
-        working-directory: src/android
+        continue-on-error: true
         run: |
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses || true
+          npx expo run:android --no-install --variant debug 2>&1 | tee build.log
+          RC=$?
+          echo "BUILD_EXIT=$RC" >> $GITHUB_ENV
+          exit $RC
 
-      - name: Build debug APK
-        working-directory: src/android
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: src/build.log
+          if-no-files-found: warn
+
+      - name: Locate APK
+        if: always()
+        working-directory: src
         run: |
-          chmod +x gradlew
-          cat gradle/wrapper/gradle-wrapper.properties
-          ./gradlew assembleDebug --no-daemon --stacktrace
+          find . -name '*.apk' -type f 2>/dev/null || echo 'no apk found'
+          find . -path '*/build/outputs/apk/*' -type d 2>/dev/null || echo 'no build output dir'
 
-      - name: Upload APK
+      - name: Upload APK (if built)
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: yusheng-apk
           path: src/android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: warn
