@@ -23,6 +23,12 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      - name: Setup Android SDK
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          ls -la $ANDROID_HOME/ || echo "ANDROID_HOME not set/found"
+          echo "JAVA_HOME=$JAVA_HOME"
+
       - name: Install dependencies
         working-directory: src
         run: npm ci
@@ -33,12 +39,15 @@ jobs:
 
       - name: Accept Android SDK licenses
         working-directory: src/android
-        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses || true
 
-      - name: Build APK
+      - name: Build debug APK
         working-directory: src/android
         run: |
           chmod +x gradlew
+          cat gradle/wrapper/gradle-wrapper.properties
           ./gradlew assembleDebug --no-daemon --stacktrace
 
       - name: Upload APK
