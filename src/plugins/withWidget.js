@@ -58,18 +58,7 @@ function withAndroidWidget(config) {
     const androidManifest = config.modResults
     const mainApplication = androidManifest.manifest.application?.[0]
 
-    // Add tools namespace if not present
-    if (!androidManifest.manifest.$) androidManifest.manifest.$ = {}
-    const attrs = androidManifest.manifest.$
-    if (!attrs['xmlns:tools']) {
-      attrs['xmlns:tools'] = 'http://schemas.android.com/tools'
-    }
-
     if (mainApplication) {
-      // Fix AndroidX / Support library conflict
-      if (!mainApplication.$) mainApplication.$ = {}
-      mainApplication.$['tools:replace'] = 'android:appComponentFactory'
-
       if (!mainApplication.receivers) mainApplication.receivers = []
       mainApplication.receivers.push({
         $: {

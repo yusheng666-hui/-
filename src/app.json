@@ -24,14 +24,40 @@
         "backgroundColor": "#1a1a2e"
       },
       "edgeToEdgeEnabled": true,
-      "intentFilters": [{"action": "SEND", "category": "DEFAULT", "data": {"mimeType": "text/plain"}}],
-      "permissions": ["android.permission.RECORD_AUDIO"]
+      "intentFilters": [
+        {
+          "action": "SEND",
+          "category": "DEFAULT",
+          "data": {
+            "mimeType": "text/plain"
+          }
+        }
+      ],
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
-    "web": {"favicon": "./assets/favicon.png"},
-    "plugins": ["expo-router", "expo-secure-store", "@react-native-voice/voice", "expo-notifications", "expo-quick-actions", "./plugins/withWidget.js"],
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "@react-native-voice/voice",
+      "expo-notifications",
+      "expo-quick-actions",
+      "./plugins/withWidget.js",
+      ["expo-build-properties", {
+      "android": {
+        "enableJetifier": true
+      }
+    }]
+    ],
     "extra": {
       "router": {},
-      "eas": {"projectId": "0f544738-2f4d-4c27-8759-3ea634398a78"}
+      "eas": {
+        "projectId": "0f544738-2f4d-4c27-8759-3ea634398a78"
+      }
     },
     "owner": "yushengchis-organization"
   }
