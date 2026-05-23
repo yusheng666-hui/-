@@ -27,11 +27,9 @@ jobs:
         working-directory: src
         run: npm ci
 
-      - name: Patch @react-native-voice/voice to remove support library
+      - name: Patch @react-native-voice/voice to use AndroidX
         working-directory: src
-        run: |
-          sed -i 's/com\.android\.support:appcompat-v7:[^"]*/androidx.appcompat:appcompat:1.6.1/' node_modules/@react-native-voice/voice/android/build.gradle
-          grep appcompat node_modules/@react-native-voice/voice/android/build.gradle
+        run: sed -i 's/com\.android\.support:appcompat-v7:[^"]*/androidx.appcompat:appcompat:1.6.1/' node_modules/@react-native-voice/voice/android/build.gradle
 
       - name: Expo prebuild
         working-directory: src
@@ -39,19 +37,9 @@ jobs:
 
       - name: Build debug APK
         working-directory: src/android
-        continue-on-error: true
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee ../build.log
-          exit $?
-
-      - name: Upload build log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-log
-          path: src/build.log
-          if-no-files-found: warn
+          ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
