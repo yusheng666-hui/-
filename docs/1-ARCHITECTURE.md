@@ -147,6 +147,29 @@ chat-bubble / mode-selector / learning-badge / mood-checkin / mood-picker / mood
 grounding-exercise / voice-recorder / error-boundary / onboarding-guide /
 emergency-floating-btn / three-good-things
 
+## CI/CD 构建流水线
+
+GitHub Actions 自动构建 Android APK，workflow 位于 `.github/workflows/build-android.yml`。
+
+### 构建步骤
+
+1. `npm ci` — 安装依赖
+2. `sed` patch — 将 `@react-native-voice/voice` 的 `com.android.support:appcompat-v7` 替换为 `androidx.appcompat:appcompat`
+3. `npx expo prebuild --platform android --no-install` — 生成原生 Android 项目
+4. `./gradlew assembleDebug` — 构建 debug APK
+5. `actions/upload-artifact` — 上传 APK 到构建产物
+
+### 触发方式
+
+- 推送到 `main` 或 `master` 分支自动触发
+- 也可在 GitHub Actions 页面手动触发（workflow_dispatch）
+
+### 产物
+
+- artifact 名称：`yusheng-apk`
+- 路径：`src/android/app/build/outputs/apk/debug/*.apk`
+- 下载后侧载到 Android 手机即可安装
+
 ## 页面路由
 
 index（首页）/ chat/[id]（聊天）/ settings（设置）/ conversations（历史）/ memories（记忆）/ insights（洞察）/ outputs（产出）

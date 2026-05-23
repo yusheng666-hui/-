@@ -60,6 +60,18 @@ supabase functions deploy chat
 supabase db push
 ```
 
+## CI/CD — 自动构建 APK
+
+每次推送到 `main` 或 `master` 分支时，GitHub Actions 自动构建 Android APK：
+
+1. **检出代码** → **安装依赖** → **Expo prebuild** → **Gradle 构建** → **上传 APK**
+2. 构建完成后，在 Actions 页面下载 `yusheng-apk` artifact
+3. 安装到 Android 手机（侧载，需允许未知来源）
+
+### 已知问题
+
+`@react-native-voice/voice` 依赖旧版 `com.android.support:appcompat-v7`，与 AndroidX 冲突。workflow 在 `npm ci` 后自动 patch 该依赖为 `androidx.appcompat:appcompat`。如果升级该库版本，需确认 patch 是否仍然有效。
+
 ## 文档
 
 详见 `docs/` 下的 5 份设计文档：
