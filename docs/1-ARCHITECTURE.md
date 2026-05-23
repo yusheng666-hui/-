@@ -170,6 +170,10 @@ GitHub Actions 自动构建 Android APK，workflow 位于 `.github/workflows/bui
 - 路径：`src/android/app/build/outputs/apk/debug/*.apk`
 - 下载后侧载到 Android 手机即可安装
 
+### 构建问题
+
+详见 [`docs/BUILD.md`](BUILD.md)。
+
 ## 页面路由
 
 index（首页）/ chat/[id]（聊天）/ settings（设置）/ conversations（历史）/ memories（记忆）/ insights（洞察）/ outputs（产出）
