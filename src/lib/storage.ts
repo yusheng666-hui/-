@@ -7,8 +7,8 @@ let setItemNative: (key: string, value: string) => Promise<void> = async () => {
 if (Platform.OS !== 'web') {
   try {
     const SecureStore = require('expo-secure-store')
-    getItemNative = SecureStore.getItemAsync
-    setItemNative = SecureStore.setItemAsync
+    getItemNative = (key: string) => SecureStore.getItemAsync(key)
+    setItemNative = (key: string, value: string) => SecureStore.setItemAsync(key, value)
   } catch {}
 }
 
