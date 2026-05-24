@@ -13,7 +13,7 @@ type ThemeContextValue = {
 const ThemeContext = createContext<ThemeContextValue | null>(null)
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [themeKey, setKey] = useState<ThemeKey>('deep_purple')
+  const [themeKey, setKey] = useState<ThemeKey>('soft_pink')
   const [theme, setTheme] = useState<ThemeColors>(THEMES.deep_purple)
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export function useTheme(): ThemeContextValue {
   if (!ctx) {
     return {
       theme: THEMES.deep_purple,
-      themeKey: 'deep_purple',
+      themeKey: 'soft_pink',
       setThemeKey: async () => {},
     }
   }

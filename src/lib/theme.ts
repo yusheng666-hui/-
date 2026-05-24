@@ -2,7 +2,7 @@
 
 import { KEYS, getItem, setItem } from './storage'
 
-export type ThemeKey = 'pure_white' | 'warm_cream' | 'soft_pink' | 'deep_purple' | 'warm_sunset' | 'amoled_black'
+export type ThemeKey = 'pure_white' | 'warm_cream' | 'soft_pink' | 'deep_purple' | 'warm_sunset' | 'amoled_black' | 'ocean_dream'
 
 export type ThemeColors = {
   background: string
@@ -107,6 +107,23 @@ const THEMES: Record<ThemeKey, ThemeColors> = {
     success: '#6b9e6b',
     warning: '#c4943a',
   },
+  // 海洋之梦 — 清新蓝紫，年轻用户最爱
+  ocean_dream: {
+    background: '#f0f4ff',
+    surface: '#ffffff',
+    surfaceLight: '#e8eefa',
+    accent: '#6366f1',
+    accentLight: '#818cf8',
+    accentMuted: '#4f46e5',
+    border: '#dde4f0',
+    text: '#1e293b',
+    textSecondary: '#475569',
+    textMuted: '#94a3b8',
+    textInverse: '#fff',
+    danger: '#ef4444',
+    success: '#10b981',
+    warning: '#f59e0b',
+  },
   // 暖阳橙（中暖暗色）
   warm_sunset: {
     background: '#1e1410',
@@ -131,7 +148,7 @@ const THEME_KEY = KEYS.THEME || 'app_theme'
 export async function getThemeKey(): Promise<ThemeKey> {
   const stored = await getItem(THEME_KEY)
   if (stored && stored in THEMES) return stored as ThemeKey
-  return 'deep_purple'
+  return 'soft_pink'
 }
 
 export async function setThemeKey(key: ThemeKey): Promise<void> {
