@@ -43,7 +43,6 @@
     "plugins": [
       "expo-router",
       "expo-secure-store",
-      "@react-native-voice/voice",
       "expo-notifications",
       "expo-quick-actions",
       "./plugins/withWidget.js",
