@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native'
 import { router } from 'expo-router'
 import { useTheme } from '../../lib/theme-context'
 import { THEMES, type ThemeKey } from '../../lib/theme'
@@ -11,6 +11,13 @@ const THEME_OPTIONS: { key: ThemeKey; label: string; emoji: string }[] = [
   { key: 'deep_purple', label: '深紫', emoji: '💜' },
   { key: 'warm_sunset', label: '暖阳', emoji: '🌅' },
   { key: 'amoled_black', label: '纯黑', emoji: '🖤' },
+]
+
+const QUICK_LINKS = [
+  { emoji: '🔑', label: 'API 配置', desc: '设置 AI 接口密钥', route: '/settings' },
+  { emoji: '🔊', label: '语音设置', desc: 'TTS 朗读与语速', route: '/settings' },
+  { emoji: '📊', label: '数据管理', desc: '导出与备份数据', route: '/settings' },
+  { emoji: '📋', label: '关于雨声', desc: '版本与帮助信息', route: '/settings' },
 ]
 
 export default function SettingsTab() {
@@ -53,12 +60,21 @@ export default function SettingsTab() {
         ))}
       </View>
 
-      <TouchableOpacity
-        style={[styles.fullSettingsBtn, { backgroundColor: theme.accent }]}
-        onPress={() => router.push('/settings')}
-      >
-        <Text style={styles.fullSettingsText}>完整设置</Text>
-      </TouchableOpacity>
+      <Text style={[styles.sectionLabel, { color: theme.textSecondary }]}>更多设置</Text>
+      {QUICK_LINKS.map((link) => (
+        <TouchableOpacity
+          key={link.label}
+          style={[styles.linkCard, { backgroundColor: theme.surface, borderColor: theme.border }]}
+          onPress={() => router.push(link.route)}
+        >
+          <Text style={styles.linkEmoji}>{link.emoji}</Text>
+          <View style={styles.linkText}>
+            <Text style={[styles.linkLabel, { color: theme.text }]}>{link.label}</Text>
+            <Text style={[styles.linkDesc, { color: theme.textMuted }]}>{link.desc}</Text>
+          </View>
+          <Text style={[styles.linkArrow, { color: theme.textMuted }]}>›</Text>
+        </TouchableOpacity>
+      ))}
     </ScrollView>
   )
 }
@@ -66,8 +82,8 @@ export default function SettingsTab() {
 const styles = StyleSheet.create({
   container: { padding: 24, paddingTop: 48, paddingBottom: 100 },
   title: { fontSize: 24, fontWeight: '700', marginBottom: 24 },
-  sectionLabel: { fontSize: 14, fontWeight: '600', marginBottom: 12 },
-  themeGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 32 },
+  sectionLabel: { fontSize: 14, fontWeight: '600', marginBottom: 12, marginTop: 8 },
+  themeGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 28 },
   themeCard: {
     borderRadius: 14, padding: 16, alignItems: 'center',
     width: '30%', borderWidth: 2, aspectRatio: 1,
@@ -75,6 +91,10 @@ const styles = StyleSheet.create({
   },
   themeEmoji: { fontSize: 28, marginBottom: 6 },
   themeLabel: { fontSize: 13 },
-  fullSettingsBtn: { borderRadius: 16, paddingVertical: 16, alignItems: 'center' },
-  fullSettingsText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  linkCard: { flexDirection: 'row', alignItems: 'center', borderRadius: 14, padding: 16, marginBottom: 10, borderWidth: 1 },
+  linkEmoji: { fontSize: 28, marginRight: 14 },
+  linkText: { flex: 1 },
+  linkLabel: { fontSize: 16, fontWeight: '600', marginBottom: 2 },
+  linkDesc: { fontSize: 13 },
+  linkArrow: { fontSize: 22 },
 })

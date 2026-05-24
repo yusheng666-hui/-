@@ -54,19 +54,19 @@ export default function ChatTab() {
 
 const styles = StyleSheet.create({
   container: { padding: 24, paddingTop: 48, paddingBottom: 100, alignItems: 'center' },
-  icon: { fontSize: 48, marginBottom: 12 },
+  icon: { fontSize: 48, marginBottom: 16 },
   title: { fontSize: 24, fontWeight: '700', marginBottom: 8 },
-  desc: { fontSize: 15, marginBottom: 24, textAlign: 'center' },
-  btn: { paddingHorizontal: 40, paddingVertical: 16, borderRadius: 16, marginBottom: 28, width: '100%', alignItems: 'center' },
+  desc: { fontSize: 15, marginBottom: 28, textAlign: 'center', lineHeight: 22 },
+  btn: { paddingHorizontal: 40, paddingVertical: 18, borderRadius: 16, marginBottom: 32, width: '100%', alignItems: 'center' },
   btnText: { color: '#fff', fontSize: 17, fontWeight: '600' },
-  featureGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, justifyContent: 'center', marginBottom: 20 },
+  featureGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, justifyContent: 'center', marginBottom: 24 },
   featureCard: {
     width: '30%', borderRadius: 14, padding: 14, alignItems: 'center',
     borderWidth: 1, aspectRatio: 1.3, justifyContent: 'center',
   },
-  featureEmoji: { fontSize: 28, marginBottom: 6 },
-  featureTitle: { fontSize: 13, fontWeight: '600', marginBottom: 2, textAlign: 'center' },
-  featureDesc: { fontSize: 10, textAlign: 'center' },
-  linkBtn: { padding: 8 },
-  linkText: { fontSize: 14, fontWeight: '500' },
+  featureEmoji: { fontSize: 28, marginBottom: 8 },
+  featureTitle: { fontSize: 13, fontWeight: '600', marginBottom: 4, textAlign: 'center' },
+  featureDesc: { fontSize: 11, textAlign: 'center', lineHeight: 15 },
+  linkBtn: { padding: 10 },
+  linkText: { fontSize: 15, fontWeight: '500' },
 })

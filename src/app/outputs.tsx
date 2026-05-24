@@ -71,6 +71,7 @@ export default function OutputsScreen() {
         <Text style={s.loading}>加载中...</Text>
       ) : items.length === 0 ? (
         <View style={s.empty}>
+          <Text style={{ fontSize: 40, marginBottom: 16 }}>📄</Text>
           <Text style={s.emptyTitle}>还没有产出</Text>
           <Text style={s.emptyDesc}>
             AI 会在对话中帮你生成回信、决策分析、日记等草稿
@@ -136,20 +137,20 @@ export default function OutputsScreen() {
 function makeStyles(theme: ThemeColors) {
   return StyleSheet.create({
     container: { flex: 1 },
-    loading: { color: theme.textMuted, textAlign: 'center', marginTop: 40 },
+    loading: { color: theme.textMuted, textAlign: 'center', marginTop: 80, fontSize: 15 },
     empty: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
-    emptyTitle: { fontSize: 18, color: theme.textMuted, fontWeight: '600' },
+    emptyTitle: { fontSize: 20, color: theme.text, fontWeight: '600' },
     emptyDesc: { fontSize: 14, color: theme.textMuted, marginTop: 8, textAlign: 'center', opacity: 0.8 },
-    list: { padding: 16 },
-    card: { borderRadius: 12, padding: 16, marginBottom: 12 },
-    cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 },
+    list: { padding: 16, paddingTop: 12 },
+    card: { borderRadius: 14, padding: 18, marginBottom: 12 },
+    cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 },
     cardTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1 },
-    cardIcon: { fontSize: 20 },
+    cardIcon: { fontSize: 22 },
     cardTitle: { color: theme.text, fontSize: 16, fontWeight: '600' },
     cardType: { color: theme.textMuted, fontSize: 12, marginTop: 2 },
-    statusBadge: { fontSize: 12, fontWeight: '600' },
-    cardContent: { color: theme.textSecondary, fontSize: 14, lineHeight: 20 },
-    cardDate: { color: theme.textMuted, fontSize: 11, marginTop: 8 },
+    statusBadge: { fontSize: 13, fontWeight: '600' },
+    cardContent: { color: theme.textSecondary, fontSize: 14, lineHeight: 21 },
+    cardDate: { color: theme.textMuted, fontSize: 11, marginTop: 10 },
     actionRow: {
       flexDirection: 'row',
       gap: 8,

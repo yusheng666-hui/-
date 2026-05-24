@@ -70,7 +70,6 @@ export default function ChatScreen() {
   const [listening, setListening] = useState(false)
   const [selectedImage, setSelectedImage] = useState<{ data: string; media_type: string } | null>(null)
   const [suggestedActions, setSuggestedActions] = useState<SuggestedAction[]>([])
-  const [opening, setOpening] = useState<string | null>(null)
   const [silentHint, setSilentHint] = useState(false)
   const [lastActivityTime, setLastActivityTime] = useState<number>(Date.now())
   const [playingBubbleId, setPlayingBubbleId] = useState<string | null>(null)
@@ -91,10 +90,7 @@ export default function ChatScreen() {
   const nextId = () => (++idCounterRef.current).toString()
 
   useEffect(() => {
-    if (!convId) {
-      checkProactiveOpening()
-      return
-    }
+    if (!convId) return
     ;(async () => {
       const msgs = await db.getMessages(convId)
       if (msgs.length > 0) {
@@ -133,28 +129,6 @@ export default function ChatScreen() {
     })()
   }, [])
 
-  const checkProactiveOpening = async () => {
-    if (convId) {
-      const msgs = await db.getMessages(convId)
-      if (msgs.length > 0) {
-        const lastTime = new Date(msgs[msgs.length - 1].created_at).getTime()
-        if (Date.now() - lastTime > 6 * 60 * 60 * 1000) {
-          const topics = await db.getTopics()
-          const activeTopic = topics.find(t => t.keywords.length > 0)
-          if (activeTopic) {
-            setOpening(`上次你提到${activeTopic.keywords[0]}——后来有变化吗？`)
-          } else {
-            setOpening('最近怎么样？')
-          }
-          return
-        }
-      }
-    }
-    const lastOpen = await db.getProfile()
-    if (lastOpen.interaction_count === 0) {
-      setOpening('嗨，我是你的情绪共生体。你不用刻意想话题——\n随便说一件今天发生的事也行，哪怕只是"今天有点累"。')
-    }
-  }
 
   const showSilentHintFn = useCallback(() => {
     if (silentTimerRef.current) clearTimeout(silentTimerRef.current)
@@ -312,7 +286,6 @@ export default function ChatScreen() {
     setInput('')
     setSelectedImage(null)
     setSending(true)
-    setOpening(null)
     setSilentHint(false)
     setQuickReplies([])
     if (silentTimerRef.current) clearTimeout(silentTimerRef.current)
@@ -492,8 +465,8 @@ export default function ChatScreen() {
         options={{
           title: '雨声',
           headerLeft: () => (
-            <TouchableOpacity onPress={() => router.dismissAll()} style={{ marginRight: 12 }}>
-              <Text style={{ color: theme.textMuted, fontSize: 13 }}>‹ 首页</Text>
+            <TouchableOpacity onPress={() => router.push('/conversations')} style={{ marginRight: 12 }}>
+              <Text style={{ color: theme.textMuted, fontSize: 13 }}>‹ 历史</Text>
             </TouchableOpacity>
           ),
           headerRight: () => {
@@ -522,19 +495,6 @@ export default function ChatScreen() {
         <Text style={{ color: theme.textMuted, fontSize: 12, textAlign: 'center', paddingVertical: 4 }}>
           ⚡ 剩余 {Math.max(0, 2 - currentRound)} 轮
         </Text>
-      )}
-
-      {opening && (
-        <TouchableOpacity
-          style={[s.openingBanner, { backgroundColor: theme.surface, borderColor: theme.accent }]}
-          onPress={() => { setInput(opening); setOpening(null) }}
-        >
-          <Text style={s.openingText}>{opening}</Text>
-          <Text style={s.openingHint}>点击回复，或关闭自行输入</Text>
-          <TouchableOpacity onPress={() => setOpening(null)} style={s.openingClose}>
-            <Text style={{ color: theme.textMuted, fontSize: 16 }}>✕</Text>
-          </TouchableOpacity>
-        </TouchableOpacity>
       )}
 
       <FlatList
@@ -588,7 +548,7 @@ export default function ChatScreen() {
         </View>
       )}
 
-      {mode === 'emergency' && !opening && (
+      {mode === 'emergency' && (
         <TouchableOpacity
           style={{ marginHorizontal: 16, marginBottom: 8, padding: 14, borderRadius: 12, backgroundColor: theme.surface, borderWidth: 1, borderColor: theme.accent, alignItems: 'center' }}
           onPress={() => setShowGrounding(true)}

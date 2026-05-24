@@ -56,10 +56,10 @@ export default function GrowthTab() {
 const styles = StyleSheet.create({
   container: { padding: 24, paddingTop: 48, paddingBottom: 100 },
   title: { fontSize: 24, fontWeight: '700', marginBottom: 6 },
-  subtitle: { fontSize: 14, marginBottom: 28 },
+  subtitle: { fontSize: 14, marginBottom: 28, lineHeight: 20 },
   section: { marginBottom: 28 },
-  sectionTitle: { fontSize: 18, fontWeight: '600', marginBottom: 12 },
-  quoteBox: { borderRadius: 16, padding: 20, alignItems: 'center', borderWidth: 1 },
-  quoteIcon: { fontSize: 28, marginBottom: 8 },
-  quoteText: { fontSize: 14, fontStyle: 'italic', textAlign: 'center' },
+  sectionTitle: { fontSize: 18, fontWeight: '600', marginBottom: 14 },
+  quoteBox: { borderRadius: 16, padding: 24, alignItems: 'center', borderWidth: 1 },
+  quoteIcon: { fontSize: 32, marginBottom: 10 },
+  quoteText: { fontSize: 14, fontStyle: 'italic', textAlign: 'center', lineHeight: 22 },
 })

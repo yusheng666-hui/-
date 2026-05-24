@@ -417,26 +417,26 @@ export default function InsightsScreen() {
 function createStyles(theme: ThemeColors) {
   return StyleSheet.create({
     container: { flex: 1 },
-    content: { padding: 24 },
+    content: { padding: 24, paddingTop: 12 },
     loadingContainer: { flex: 1 },
-    loading: { color: theme.textMuted, textAlign: 'center', marginTop: 40 },
+    loading: { color: theme.textMuted, textAlign: 'center', marginTop: 80, fontSize: 15 },
     section: { marginBottom: 32 },
-    sectionTitle: { fontSize: 20, fontWeight: '700', color: theme.text, marginBottom: 4 },
+    sectionTitle: { fontSize: 20, fontWeight: '700', color: theme.text, marginBottom: 6 },
     sectionDesc: { fontSize: 13, color: theme.textMuted, marginBottom: 16 },
-    empty: { alignItems: 'center', paddingTop: 60 },
-    emptyTitle: { fontSize: 18, color: theme.textMuted, fontWeight: '600' },
-    emptyDesc: { fontSize: 14, color: theme.border, marginTop: 8, textAlign: 'center' },
+    empty: { alignItems: 'center', paddingTop: 80 },
+    emptyTitle: { fontSize: 20, color: theme.text, fontWeight: '600' },
+    emptyDesc: { fontSize: 14, color: theme.textMuted, marginTop: 8, textAlign: 'center' },
 
     // Stats row
     statsRow: { flexDirection: 'row', gap: 10, marginBottom: 24 },
     statCard: {
       flex: 1,
-      borderRadius: 12,
-      padding: 16,
+      borderRadius: 14,
+      padding: 18,
       alignItems: 'center',
       borderWidth: 1,
     },
-    statNumber: { fontSize: 24, fontWeight: '700' },
+    statNumber: { fontSize: 26, fontWeight: '700' },
     statLabel: { fontSize: 12, marginTop: 4 },
 
     // Weekly chart
@@ -474,10 +474,10 @@ function createStyles(theme: ThemeColors) {
       gap: 10,
     },
     milestoneCard: {
-      borderRadius: 12, padding: 12, marginBottom: 0, borderWidth: 1, width: '48%',
+      borderRadius: 14, padding: 14, marginBottom: 0, borderWidth: 1, width: '48%',
     },
-    milestoneType: { color: theme.text, fontSize: 13, fontWeight: '600', marginBottom: 2 },
-    milestoneDesc: { color: theme.textSecondary, fontSize: 13, lineHeight: 18, marginTop: 4 },
+    milestoneType: { color: theme.text, fontSize: 14, fontWeight: '600', marginBottom: 4 },
+    milestoneDesc: { color: theme.textSecondary, fontSize: 13, lineHeight: 18, marginTop: 6 },
     milestoneDate: { color: theme.textMuted, fontSize: 11 },
 
     // Weekly summary

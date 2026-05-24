@@ -43,14 +43,15 @@
     "plugins": [
       "expo-router",
       "expo-secure-store",
-"expo-notifications",
+      "@react-native-voice/voice",
+      "expo-notifications",
       "expo-quick-actions",
       "./plugins/withWidget.js",
       ["expo-build-properties", {
-      "android": {
-        "enableJetifier": true
-      }
-    }]
+        "android": {
+          "enableJetifier": true
+        }
+      }]
     ],
     "extra": {
       "router": {},

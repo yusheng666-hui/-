@@ -27,9 +27,24 @@ jobs:
         working-directory: src
         run: npm ci
 
+      - name: Patch @react-native-voice/voice to use AndroidX
+        working-directory: src
+        run: sed -i 's/com\.android\.support:appcompat-v7:[^"]*/androidx.appcompat:appcompat:1.6.1/' node_modules/@react-native-voice/voice/android/build.gradle
+
       - name: Expo prebuild
         working-directory: src
         run: npx expo prebuild --platform android --no-install
+
+      - name: Fix AndroidManifest.xml
+        working-directory: src
+        run: |
+          MANIFEST="android/app/src/main/AndroidManifest.xml"
+          if grep -q 'android:appComponentFactory' "$MANIFEST"; then
+            echo "appComponentFactory already present, skipping"
+          else
+            sed -i 's|<application |<application android:appComponentFactory="androidx.core.app.CoreComponentFactory" tools:replace="android:appComponentFactory" |' "$MANIFEST"
+            echo "Added appComponentFactory to manifest"
+          fi
 
       - name: Bundle JS for Android
         working-directory: src

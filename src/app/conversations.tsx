@@ -58,14 +58,21 @@ export default function ConversationsScreen() {
 
   const s = makeStyles(theme)
 
-  return (
-    <View style={[s.container, { backgroundColor: theme.background }]}>
-      {loading ? (
+  if (loading) {
+    return (
+      <View style={[s.container, { backgroundColor: theme.background }]}>
         <Text style={s.loading}>加载中...</Text>
-      ) : convs.length === 0 ? (
+      </View>
+    )
+  }
+
+  if (convs.length === 0) {
+    return (
+      <View style={[s.container, { backgroundColor: theme.background }]}>
         <View style={s.empty}>
-          <Text style={s.emptyTitle}>还没有对话</Text>
-          <Text style={s.emptyDesc}>开始你的第一次倾诉吧</Text>
+          <Text style={{ fontSize: 40, marginBottom: 16 }}>💬</Text>
+          <Text style={[s.emptyTitle, { color: theme.text }]}>还没有对话</Text>
+          <Text style={[s.emptyDesc, { color: theme.textMuted }]}>开始你的第一次倾诉吧</Text>
           <TouchableOpacity
             style={[s.startButton, { backgroundColor: theme.accent }]}
             onPress={() => router.push('/chat/new')}
@@ -73,36 +80,41 @@ export default function ConversationsScreen() {
             <Text style={s.startText}>开始对话</Text>
           </TouchableOpacity>
         </View>
-      ) : (
-        <FlatList
-          data={convs}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={s.list}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => loadData(true)} tintColor={theme.textMuted} />}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={[s.card, { backgroundColor: theme.surface, borderColor: theme.border, borderWidth: 1 }]}
-              onPress={() => router.push(`/chat/${item.id}`)}
-              onLongPress={() => handleDelete(item)}
-            >
-              <View style={s.cardHeader}>
-                <Text style={s.modeTag}>
-                  {modeLabel[item.mode] || '💬 聊天'}
-                </Text>
-                <Text style={s.date}>{formatDate(item.created_at)}</Text>
-              </View>
-              {item.last_message && (
-                <Text style={s.preview} numberOfLines={2}>
-                  {item.last_message}
-                </Text>
-              )}
-              <Text style={s.rounds}>
-                已对话 {item.current_round} 轮
+      </View>
+    )
+  }
+
+  return (
+    <View style={[s.container, { backgroundColor: theme.background }]}>
+      <FlatList
+        data={convs}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={s.list}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => loadData(true)} tintColor={theme.textMuted} />}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={[s.card, { backgroundColor: theme.surface, borderColor: theme.border }]}
+            onPress={() => router.push(`/chat/${item.id}`)}
+            onLongPress={() => handleDelete(item)}
+            activeOpacity={0.7}
+          >
+            <View style={s.cardHeader}>
+              <Text style={[s.modeTag, { color: theme.textSecondary }]}>
+                {modeLabel[item.mode] || '💬 聊天'}
               </Text>
-            </TouchableOpacity>
-          )}
-        />
-      )}
+              <Text style={[s.date, { color: theme.textMuted }]}>{formatDate(item.created_at)}</Text>
+            </View>
+            {item.last_message && (
+              <Text style={[s.preview, { color: theme.textSecondary }]} numberOfLines={2}>
+                {item.last_message}
+              </Text>
+            )}
+            <Text style={[s.rounds, { color: theme.textMuted }]}>
+              已对话 {item.current_round} 轮
+            </Text>
+          </TouchableOpacity>
+        )}
+      />
     </View>
   )
 }
@@ -110,18 +122,18 @@ export default function ConversationsScreen() {
 function makeStyles(theme: ThemeColors) {
   return StyleSheet.create({
     container: { flex: 1 },
-    loading: { color: theme.textMuted, textAlign: 'center', marginTop: 40 },
+    loading: { color: theme.textMuted, textAlign: 'center', marginTop: 80, fontSize: 15 },
     empty: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
-    emptyTitle: { fontSize: 20, color: theme.textMuted, fontWeight: '600' },
-    emptyDesc: { fontSize: 14, color: theme.textMuted, marginTop: 8 },
-    startButton: { paddingHorizontal: 32, paddingVertical: 12, borderRadius: 12, marginTop: 24 },
-    startText: { color: '#fff', fontWeight: '600' },
-    list: { padding: 16 },
-    card: { borderRadius: 12, padding: 16, marginBottom: 12 },
-    cardHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
-    modeTag: { color: theme.textMuted, fontSize: 13 },
-    date: { color: theme.textMuted, fontSize: 13 },
-    preview: { color: theme.textSecondary, fontSize: 15, lineHeight: 22 },
-    rounds: { color: theme.textMuted, fontSize: 12, marginTop: 8, opacity: 0.6 },
+    emptyTitle: { fontSize: 20, fontWeight: '600' },
+    emptyDesc: { fontSize: 14, marginTop: 8, textAlign: 'center' },
+    startButton: { paddingHorizontal: 36, paddingVertical: 14, borderRadius: 14, marginTop: 24 },
+    startText: { color: '#fff', fontWeight: '600', fontSize: 16 },
+    list: { padding: 16, paddingTop: 12 },
+    card: { borderRadius: 14, padding: 18, marginBottom: 12, borderWidth: 1 },
+    cardHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
+    modeTag: { fontSize: 14, fontWeight: '500' },
+    date: { fontSize: 13 },
+    preview: { fontSize: 15, lineHeight: 22 },
+    rounds: { fontSize: 12, marginTop: 10, opacity: 0.6 },
   })
 }

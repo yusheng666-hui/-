@@ -55,42 +55,46 @@ export default function MemoriesScreen() {
 
   return (
     <View style={[s.container, { backgroundColor: theme.background }]}>
-      <View style={[s.filterRow, { backgroundColor: theme.background }]}>
+      {/* Search bar */}
+      <View style={s.searchRow}>
+        <TextInput
+          style={[s.searchInput, { backgroundColor: theme.surface, color: theme.text, borderColor: theme.border }]}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          placeholder="搜索记忆内容..."
+          placeholderTextColor={theme.textMuted}
+          autoCapitalize="none"
+        />
+      </View>
+
+      {/* Filter chips */}
+      <View style={s.filterRow}>
         <TouchableOpacity
-          style={[s.filterChip, { backgroundColor: theme.surface }, !filter && { backgroundColor: theme.accent }]}
+          style={[s.filterChip, !filter ? { backgroundColor: theme.accent } : { backgroundColor: theme.surface, borderColor: theme.border }]}
           onPress={() => setFilter(null)}
         >
-          <Text style={[s.filterText, { color: theme.textMuted }, !filter && { color: '#fff' }]}>全部</Text>
+          <Text style={[s.filterText, !filter ? { color: '#fff' } : { color: theme.textMuted }]}>全部</Text>
         </TouchableOpacity>
         {Object.entries(CATEGORY_CONFIG).map(([key, cfg]) => (
           <TouchableOpacity
             key={key}
-            style={[s.filterChip, { backgroundColor: theme.surface }, filter === key && { backgroundColor: cfg.color }]}
+            style={[s.filterChip, filter === key ? { backgroundColor: cfg.color } : { backgroundColor: theme.surface, borderColor: theme.border }]}
             onPress={() => setFilter(key)}
           >
-            <Text style={[s.filterText, { color: theme.textMuted }, filter === key && { color: '#fff' }]}>
+            <Text style={[s.filterText, filter === key ? { color: '#fff' } : { color: theme.textMuted }]}>
               {cfg.label}
             </Text>
           </TouchableOpacity>
         ))}
       </View>
 
-      {/* 搜索框 */}
-      <TextInput
-        style={[s.searchInput, { backgroundColor: theme.surface, color: theme.text, borderColor: theme.border }]}
-        value={searchQuery}
-        onChangeText={setSearchQuery}
-        placeholder="搜索记忆内容..."
-        placeholderTextColor={theme.textMuted}
-        autoCapitalize="none"
-      />
-
       {loading ? (
-        <Text style={s.loading}>加载中...</Text>
+        <Text style={[s.loading, { color: theme.textMuted }]}>加载中...</Text>
       ) : filtered.length === 0 ? (
         <View style={s.empty}>
-          <Text style={s.emptyTitle}>记忆库还是空的</Text>
-          <Text style={s.emptyDesc}>
+          <Text style={{ fontSize: 40, marginBottom: 16 }}>🧠</Text>
+          <Text style={[s.emptyTitle, { color: theme.text }]}>记忆库还是空的</Text>
+          <Text style={[s.emptyDesc, { color: theme.textMuted }]}>
             AI 会在对话中自动记录你的偏好和重要信息
           </Text>
         </View>
@@ -99,26 +103,25 @@ export default function MemoriesScreen() {
           data={filtered}
           keyExtractor={(item) => item.id}
           contentContainerStyle={s.list}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => loadData(true)} tintColor={'#888'} />}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => loadData(true)} tintColor={theme.textMuted} />}
           renderItem={({ item }) => {
             const cfg = CATEGORY_CONFIG[item.category] || { label: item.category, color: theme.accentMuted }
             return (
               <TouchableOpacity
-                style={[s.card, { backgroundColor: theme.surface, borderColor: theme.border, borderWidth: 1 }]}
+                style={[s.card, { backgroundColor: theme.surface, borderColor: theme.border }]}
                 onLongPress={() => handleDelete(item.id)}
+                activeOpacity={0.7}
               >
                 <View style={s.cardHeader}>
                   <View style={[s.categoryTag, { backgroundColor: cfg.color + '22', borderColor: cfg.color }]}>
                     <Text style={[s.categoryText, { color: cfg.color }]}>{cfg.label}</Text>
                   </View>
                   {item.emotion_tag && (
-                    <Text style={s.emotionTag}>{item.emotion_tag}</Text>
+                    <Text style={[s.emotionTag, { color: theme.textMuted }]}>{item.emotion_tag}</Text>
                   )}
-                  <Text style={s.weight}>重要度 {item.weight}</Text>
+                  <Text style={[s.weight, { color: theme.textMuted }]}>重要度 {item.weight}</Text>
                 </View>
-                <Text style={s.content}>{item.content}</Text>
-
-                {/* 分享按钮 */}
+                <Text style={[s.content, { color: theme.text }]}>{item.content}</Text>
                 <TouchableOpacity
                   style={[s.shareBtn, { backgroundColor: theme.surfaceLight }]}
                   onPress={() => Share.share({ message: `💭 ${item.content}` })}
@@ -137,31 +140,27 @@ export default function MemoriesScreen() {
 function makeStyles(theme: ThemeColors) {
   return StyleSheet.create({
     container: { flex: 1 },
-    filterRow: { flexDirection: 'row', padding: 12, paddingBottom: 0, gap: 8, flexWrap: 'wrap' },
+    searchRow: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 },
     searchInput: {
-      marginHorizontal: 12,
-      marginBottom: 8,
-      borderRadius: 10,
-      paddingHorizontal: 14,
-      paddingVertical: 10,
-      fontSize: 14,
-      borderWidth: 1,
+      borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12,
+      fontSize: 15, borderWidth: 1,
     },
-    filterChip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16 },
+    filterRow: { flexDirection: 'row', paddingHorizontal: 16, paddingBottom: 12, gap: 8, flexWrap: 'wrap' },
+    filterChip: { paddingHorizontal: 14, paddingVertical: 7, borderRadius: 16, borderWidth: 1, borderColor: 'transparent' },
     filterText: { fontSize: 13 },
-    loading: { color: theme.textMuted, textAlign: 'center', marginTop: 40 },
+    loading: { textAlign: 'center', marginTop: 80, fontSize: 15 },
     empty: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
-    emptyTitle: { fontSize: 18, color: theme.textMuted, fontWeight: '600' },
-    emptyDesc: { fontSize: 14, color: theme.textMuted, marginTop: 8, textAlign: 'center', opacity: 0.8 },
-    list: { padding: 16 },
-    card: { borderRadius: 12, padding: 16, marginBottom: 12 },
+    emptyTitle: { fontSize: 20, fontWeight: '600' },
+    emptyDesc: { fontSize: 14, marginTop: 8, textAlign: 'center', opacity: 0.8 },
+    list: { padding: 16, paddingTop: 4 },
+    card: { borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1 },
     cardHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8 },
-    categoryTag: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8, borderWidth: 1 },
-    categoryText: { fontSize: 11, fontWeight: '600' },
-    emotionTag: { color: theme.textMuted, fontSize: 12 },
-    weight: { color: theme.textMuted, fontSize: 12, marginLeft: 'auto', opacity: 0.6 },
-    content: { color: theme.text, fontSize: 15, lineHeight: 22 },
-    shareBtn: { alignSelf: 'flex-end', marginTop: 8, paddingHorizontal: 12, paddingVertical: 4, borderRadius: 8 },
-    shareBtnText: { fontSize: 12, fontWeight: '500' },
+    categoryTag: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 8, borderWidth: 1 },
+    categoryText: { fontSize: 12, fontWeight: '600' },
+    emotionTag: { fontSize: 12 },
+    weight: { fontSize: 12, marginLeft: 'auto', opacity: 0.6 },
+    content: { fontSize: 15, lineHeight: 22 },
+    shareBtn: { alignSelf: 'flex-end', marginTop: 10, paddingHorizontal: 14, paddingVertical: 5, borderRadius: 8 },
+    shareBtnText: { fontSize: 13, fontWeight: '500' },
   })
 }
