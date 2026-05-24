@@ -45,6 +45,7 @@
       "expo-secure-store",
       "expo-notifications",
       "expo-quick-actions",
+      "./plugins/withVoiceAndroidX.js",
       "./plugins/withWidget.js",
       ["expo-build-properties", {
         "android": {
