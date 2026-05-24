@@ -13,7 +13,6 @@ import BreathingExercise from '../../components/breathing-exercise'
 export default function HomeTab() {
   const { theme } = useTheme()
   const [configured, setConfigured] = useState(false)
-  const [loading, setLoading] = useState(true)
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [showThreeGoodThings, setShowThreeGoodThings] = useState(false)
   const [showBreathing, setShowBreathing] = useState(false)
@@ -29,8 +28,6 @@ export default function HomeTab() {
       if (!profile.onboarding_completed) {
         setTimeout(() => setShowOnboarding(true), 500)
       }
-
-      setLoading(false)
     })()
   }, [])
 
@@ -78,18 +75,11 @@ export default function HomeTab() {
         </TouchableOpacity>
       )}
 
-      <TouchableOpacity
-        style={[styles.chatButton, { backgroundColor: theme.accent }]}
-        onPress={() => router.push('/chat/new')}
-      >
-        <Text style={styles.chatButtonText}>开始对话</Text>
-      </TouchableOpacity>
-
       <View style={styles.quickRow}>
-        <QuickBtn emoji="💬" label="历史对话" theme={theme} onPress={() => router.push('/conversations')} />
-        <QuickBtn emoji="🧠" label="记忆库" theme={theme} onPress={() => router.push('/memories')} />
         <QuickBtn emoji="📊" label="情绪洞察" theme={theme} onPress={() => router.push('/insights')} />
-        <QuickBtn emoji="📄" label="生成内容" theme={theme} onPress={() => router.push('/outputs')} />
+        <QuickBtn emoji="🧠" label="记忆库" theme={theme} onPress={() => router.push('/memories')} />
+        <QuickBtn emoji="📄" label="内容" theme={theme} onPress={() => router.push('/outputs')} />
+        <QuickBtn emoji="📋" label="历史" theme={theme} onPress={() => router.push('/conversations')} />
       </View>
 
       <ThreeGoodThings
@@ -99,11 +89,11 @@ export default function HomeTab() {
         theme={theme}
       />
       <TouchableOpacity
-        style={{ alignItems: 'center', marginBottom: 16 }}
+        style={{ alignItems: 'center' }}
         onPress={() => setShowThreeGoodThings((p) => !p)}
       >
         <Text style={{ color: theme.textMuted, fontSize: 13 }}>
-          {showThreeGoodThings ? '收起三件好事' : '🌱 今天三件好事'}
+          {showThreeGoodThings ? '收起' : '🌱 今天三件好事'}
         </Text>
       </TouchableOpacity>
 
@@ -138,8 +128,6 @@ const styles = StyleSheet.create({
   container: { padding: 24, paddingTop: 48, paddingBottom: 100, alignItems: 'center' },
   title: { fontSize: 32, fontWeight: '700', marginBottom: 6 },
   subtitle: { fontSize: 16, marginBottom: 28 },
-  chatButton: { paddingHorizontal: 48, paddingVertical: 16, borderRadius: 16, marginBottom: 24, width: '100%', alignItems: 'center' },
-  chatButtonText: { color: '#fff', fontSize: 18, fontWeight: '600' },
   breatheBtn: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
     gap: 10, paddingVertical: 14, paddingHorizontal: 24,

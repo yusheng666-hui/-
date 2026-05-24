@@ -113,10 +113,10 @@ export function ModeBadge({ mode, theme }: { mode: string; theme?: ThemeColors }
 function makeStyles(theme?: ThemeColors) {
   return StyleSheet.create({
     bubble: {
-      maxWidth: '80%',
-      padding: 12,
-      borderRadius: 16,
-      marginBottom: 12,
+      maxWidth: '82%',
+      padding: 14,
+      borderRadius: 18,
+      marginBottom: 14,
     },
     userBubble: {
       backgroundColor: theme?.accent || '#533483',
@@ -157,8 +157,8 @@ function makeStyles(theme?: ThemeColors) {
       fontSize: 12,
       opacity: 0.6,
     },
-    userText: { color: '#fff', fontSize: 16 },
-    assistantText: { color: theme?.text || '#e0e0e0', fontSize: 16 },
+    userText: { color: '#fff', fontSize: 16, lineHeight: 24 },
+    assistantText: { color: theme?.text || '#e0e0e0', fontSize: 16, lineHeight: 24 },
     voiceRow: {
       flexDirection: 'row',
       alignItems: 'center',
